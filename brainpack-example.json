@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "name": "example-placeholder-brain-pack",
+    "description": "Tiny demo schema only. Not MaleCNS data.",
+    "nodeCount": 3,
+    "edgeCount": 2
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "type": "sensory"
+    },
+    {
+      "id": 2,
+      "type": "interneuron"
+    },
+    {
+      "id": 3,
+      "type": "motor"
+    }
+  ],
+  "edges": [
+    {
+      "source": 1,
+      "target": 2,
+      "weight": 4
+    },
+    {
+      "source": 2,
+      "target": 3,
+      "weight": 6
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0f14" />
+  <title>FlyBand Lab</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div>
+          <h1>FLYBAND LAB</h1>
+          <p>connectome-driven garage band</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="section-title">ROOMS</div>
+        <div class="room-grid">
+          <button data-room="practice">Practice</button>
+          <button data-room="stage">Stage</button>
+          <button data-room="dining">Dining</button>
+          <button data-room="chill">Chill</button>
+          <button data-room="lab">Lab</button>
+          <button data-room="box">The Box™</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">BAND</div>
+        <div id="flyList" class="fly-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">SELECTED FLY</div>
+        <div id="flyCard" class="fly-card"></div>
+      </section>
+
+      <section class="panel action-panel">
+        <div class="section-title">ACTIONS</div>
+        <div class="action-grid">
+          <button id="practiceBtn">Practice</button>
+          <button id="performBtn">Perform</button>
+          <button id="restBtn">Rest</button>
+          <button id="feedBtn">Give Fruit</button>
+          <button id="chillBtn">Social Time</button>
+          <button id="boxBtn" class="danger">Dark Room</button>
+          <button id="waspBtn" class="danger">Release Wasp</button>
+          <button id="rewardBtn" class="good">Big Reward</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">BRAIN</div>
+        <div class="brain-row">
+          <span>Mode</span>
+          <span id="brainModeBadge" class="badge">LOCAL LEARNER</span>
+        </div>
+        <div class="brain-row">
+          <span>Brain pack</span>
+          <label class="file-label">
+            Import
+            <input id="brainPackInput" type="file" accept=".json,application/json" />
+          </label>
+        </div>
+        <p class="tiny">Brain packs let us plug reduced MaleCNS circuits into the same app later without rewriting the interface.</p>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">SAVE / CLOUD</div>
+        <div class="action-grid">
+          <button id="saveBtn">Save Local</button>
+          <button id="exportBtn">Export Save</button>
+          <label class="file-label wide">Import Save<input id="importSaveInput" type="file" accept=".json,application/json" /></label>
+          <button id="cloudBtn">Cloud Settings</button>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">CURRENT ROOM</div>
+          <h2 id="roomTitle">Practice Room</h2>
+        </div>
+        <div class="top-status">
+          <div><span class="status-dot"></span><span id="simStatus">SIM RUNNING</span></div>
+          <div id="clock">DAY 1 · 12:00</div>
+        </div>
+      </header>
+
+      <div id="sceneWrap">
+        <canvas id="scene"></canvas>
+        <div class="scene-hud">
+          <div id="message" class="message">Pick a fly and ruin its afternoon.</div>
+          <div class="hud-actions">
+            <button id="pauseBtn">Pause</button>
+            <button id="speedBtn">1×</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="bottom-grid">
+        <div class="panel">
+          <div class="section-title">PROGRESS</div>
+          <div id="progressPanel"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title">EVENT LOG</div>
+          <div id="log" class="log"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title">BAND STATUS</div>
+          <div id="bandPanel"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="cloudDialog">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-head">
+        <div>
+          <div class="eyebrow">OPTIONAL</div>
+          <h3>Cloud Sync</h3>
+        </div>
+        <button value="cancel" class="icon-btn">×</button>
+      </div>
+      <p>This is for using the same save at home and work. We will set it up with a free Supabase project.</p>
+      <label>
+        Supabase Project URL
+        <input id="supabaseUrl" placeholder="https://xxxxx.supabase.co" />
+      </label>
+      <label>
+        Supabase anon/public key
+        <textarea id="supabaseKey" rows="4" placeholder="Paste the anon key here"></textarea>
+      </label>
+      <label>
+        Save name
+        <input id="cloudSaveName" value="main" />
+      </label>
+      <div class="dialog-actions">
+        <button id="cloudSaveSettingsBtn" value="cancel">Save Settings</button>
+        <button id="cloudUploadBtn" value="cancel">Upload Save</button>
+        <button id="cloudDownloadBtn" value="cancel">Download Save</button>
+      </div>
+      <p class="tiny">Never put a Supabase service-role key here. The public anon key is the correct one.</p>
+    </form>
+  </dialog>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
