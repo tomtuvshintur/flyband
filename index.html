@@ -1,195 +1,218 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#080b10" />
-  <title>FlyBand House</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FlyBand V2 Beta</title>
+  <link rel="stylesheet" href="./styles.css"/>
   <script type="importmap">
   {
     "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
     }
   }
   </script>
 </head>
 <body>
-<div id="app">
-  <aside id="sidebar" class="sidebar">
-    <header class="brand">
-      <div class="brand-mark">FB</div>
-      <div>
-        <h1>FLYBAND HOUSE</h1>
-        <p>connectome-inspired music lab</p>
-      </div>
-    </header>
-
-    <section class="panel compact">
-      <div class="section-head"><span>ROOMS</span><span class="hint">click = camera</span></div>
-      <div id="roomButtons" class="room-grid"></div>
-    </section>
-
-    <section class="panel compact">
-      <div class="section-head">
-        <span>FLIES</span>
-        <button id="selectAllBtn" class="mini">Select all</button>
-      </div>
-      <div id="flyList" class="fly-list"></div>
-      <p class="hint line">Ctrl/Cmd + click to multi-select.</p>
-    </section>
-
-    <section class="panel compact">
-      <div class="section-head"><span>SELECTED</span><span id="selectionCount" class="badge">0</span></div>
-      <div id="selectedSummary" class="selected-summary"></div>
-    </section>
-
-    <section class="panel compact">
-      <div class="section-head"><span>COMMANDS</span><span class="hint">selected flies only</span></div>
-      <div class="command-grid">
-        <button id="sendBtn">Send</button>
-        <button id="giveBtn">Give</button>
-        <button id="punishBtn">Punish</button>
-        <button id="rehearseBtn">Rehearse</button>
-        <button id="performBtn">Perform</button>
-        <button id="waspBtn" class="danger-soft">Release Wasp</button>
-      </div>
-    </section>
-
-    <section class="panel compact">
-      <div class="section-head"><span>CURRICULUM</span><span id="curriculumType" class="badge">BUILT-IN</span></div>
-      <div id="curriculumCard" class="curriculum-card"></div>
-      <div class="command-grid two">
-        <button id="uploadSongBtn">Upload MP3</button>
-        <button id="teachNotesBtn">Teach Notes</button>
-      </div>
-    </section>
-
-    <section class="panel compact">
-      <div class="section-head"><span>SIMULATION</span><span id="simClock" class="mono">Day 1 · 12:00</span></div>
-      <div class="sim-row">
-        <button id="pauseBtn">Pause</button>
-        <button id="speedBtn">2×</button>
-        <button id="audioBtn">Audio: On</button>
-      </div>
-    </section>
-
-    <section class="panel compact">
-      <div class="section-head"><span>SAVE</span><span class="hint">browser + optional cloud</span></div>
-      <div class="command-grid two">
-        <button id="saveBtn">Save</button>
-        <button id="exportBtn">Export</button>
-        <label class="file-button">Import<input id="importSaveInput" type="file" accept="application/json,.json" /></label>
-        <button id="cloudBtn">Cloud</button>
-      </div>
-    </section>
-  </aside>
-
-  <main class="main">
-    <header class="topbar">
-      <div>
-        <div class="eyebrow">HOUSE VIEW</div>
-        <h2 id="viewTitle">Whole House</h2>
-      </div>
-      <div class="top-help">
-        <span>Wheel: zoom</span><span>Drag: pan</span><span>Ctrl+drag / right-drag: rotate</span><span>F: focus</span><span>Home: whole house</span>
-      </div>
-    </header>
-
-    <section id="sceneWrap" class="scene-wrap">
-      <canvas id="scene"></canvas>
-      <div id="sceneToast" class="scene-toast">FlyBand V2 ready.</div>
-      <div id="taskTicker" class="task-ticker"></div>
-
-      <button id="brainMini" class="brain-mini" aria-label="Open neural activity monitor">
-        <canvas id="brainMiniCanvas" width="300" height="190"></canvas>
-        <div class="brain-mini-head">
-          <span id="brainMiniName">Tom</span>
-          <span id="brainMode" class="brain-mode">PROXY</span>
+  <div id="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-glow"></div>
+        <div>
+          <h1>FLYBAND HOUSE</h1>
+          <p>five flies, one house, increasingly questionable management</p>
         </div>
-        <div id="brainMiniAction" class="brain-mini-action">idle</div>
-      </button>
-    </section>
-
-    <section class="lower-grid">
-      <div class="panel metrics-panel">
-        <div class="section-head"><span>LIVE STATS</span><span id="statsFlyName" class="badge">Tom</span></div>
-        <div id="statsGrid" class="stats-grid"></div>
       </div>
-      <div class="panel progress-panel">
-        <div class="section-head"><span>MUSIC PROGRESS</span><span id="progressFlyName" class="badge">Tom</span></div>
-        <div id="progressGrid"></div>
+
+      <section class="panel">
+        <div class="panel-title">ROOMS</div>
+        <div id="roomButtons" class="room-list"></div>
+        <div class="tiny" style="margin-top:8px">Click a room to move the camera there. Flies only move when you send them.</div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">BAND</div>
+        <div class="selection-row">
+          <button id="selectAllBtn">Select All</button>
+          <button id="clearSelBtn">Clear</button>
+        </div>
+        <div id="flyList" class="fly-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">SMART ACTIONS</div>
+        <div class="action-stack">
+          <div class="action-row">
+            <button id="sendBtn">Send</button>
+            <select id="sendRoom">
+              <option value="practice">Practice</option>
+              <option value="stage">Stage</option>
+              <option value="dining">Dining</option>
+              <option value="chill">Chill</option>
+              <option value="lab">Lab</option>
+              <option value="dark">Dark Room</option>
+            </select>
+          </div>
+          <div class="action-row">
+            <select id="sendDuration">
+              <option value="auto">Auto Duration</option>
+              <option value="3">3 min</option>
+              <option value="5">5 min</option>
+              <option value="8">8 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+            </select>
+            <button id="cancelTaskBtn">Cancel Task</button>
+          </div>
+          <div class="action-row">
+            <button id="giveBtn">Give</button>
+            <select id="foodSelect">
+              <option value="shit">Shit</option>
+              <option value="apple">Apple</option>
+              <option value="peach">Peach</option>
+              <option value="sugar">Sugar Cube</option>
+              <option value="cola">Coke</option>
+            </select>
+          </div>
+          <div class="action-row">
+            <button id="swatBtn" class="danger">Swat</button>
+            <button id="waspBtn" class="danger">Release Wasp</button>
+          </div>
+          <div class="action-row">
+            <button id="closeDoorBtn">Close Room Door</button>
+            <button id="openDoorBtn">Open Room Door</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">SELECTED FLY / STATS</div>
+        <div id="selectedSummary"></div>
+        <div id="selectedStats"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">CURRICULUM</div>
+        <div class="action-stack">
+          <div class="action-row">
+            <label class="filebtn">Upload MP3/WAV<input id="audioInput" type="file" accept=".mp3,.wav,audio/*"></label>
+            <button id="notesBtn">Open Note Board</button>
+          </div>
+          <div id="songCard" class="song-card">
+            <div><b>No song loaded.</b></div>
+            <div class="tiny">Upload audio so the flies have something to chase besides vibes and chaos.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">SYSTEM</div>
+        <div class="selection-row">
+          <button id="saveBtn">Save</button>
+          <button id="exportBtn">Export</button>
+          <label class="filebtn">Import<input id="importInput" type="file" accept=".json"></label>
+        </div>
+        <div class="selection-row">
+          <button id="speedBtn">1×</button>
+          <button id="pauseBtn">Pause</button>
+          <button id="resetCamBtn">Reset Cam</button>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <header class="topbar panel">
+        <div>
+          <div class="eyebrow">LIVE HOUSE</div>
+          <h2 id="headline">Practice Wing</h2>
+        </div>
+        <div class="top-right">
+          <div id="clock">DAY 1 · 12:00</div>
+          <div id="simState" class="pill">RUNNING</div>
+        </div>
+      </header>
+
+      <div id="sceneWrap" class="panel">
+        <canvas id="scene"></canvas>
+
+        <div class="sim-overlay top-left">
+          <div class="overlay-card">
+            <div class="overlay-title">HOUSE FEED</div>
+            <div id="statusMessage">Welcome home. Pick a fly and make some poor decisions.</div>
+            <div class="tiny" style="margin-top:6px">Scene controls: wheel zoom · drag orbit · Shift+drag pan · Ctrl+drag fine orbit · double click reset.</div>
+          </div>
+        </div>
+
+        <div id="brainMini" class="brain-mini">
+          <div class="brain-mini-head">
+            <span>BRAIN MONITOR</span>
+            <span id="brainProxy" class="pill small">PROXY</span>
+          </div>
+          <canvas id="brainCanvas" width="260" height="170"></canvas>
+          <div class="brain-mini-foot">
+            <div id="brainFlyName">Tom · Piano</div>
+            <button id="expandBrainBtn">Expand</button>
+          </div>
+        </div>
       </div>
-      <div class="panel log-panel">
-        <div class="section-head"><span>EVENT LOG</span><button id="clearLogBtn" class="mini">clear</button></div>
-        <div id="log" class="log"></div>
-      </div>
-    </section>
-  </main>
-</div>
 
-<input id="songInput" type="file" accept="audio/mpeg,audio/mp3,audio/wav,.mp3,.wav" hidden />
-
-<dialog id="sendDialog">
-  <form method="dialog" class="dialog-card wide">
-    <div class="dialog-head"><div><div class="eyebrow">COMMAND</div><h3>Send selected flies</h3></div><button value="cancel" class="icon-btn">×</button></div>
-    <div id="sendRoomChoices" class="choice-grid"></div>
-    <div class="duration-row">
-      <label><span>Duration</span><select id="sendDuration"><option value="auto">Auto · 5–10 min</option><option value="3">3 min</option><option value="5">5 min</option><option value="10">10 min</option><option value="20">20 min</option><option value="30">30 min</option></select></label>
-      <label><span>After task</span><select id="afterTask"><option value="auto">Return to autonomy</option><option value="stay">Stay there</option></select></label>
-    </div>
-    <div class="dialog-actions"><button value="cancel">Cancel</button><button id="confirmSendBtn" value="cancel" class="primary">Send them</button></div>
-  </form>
-</dialog>
-
-<dialog id="giveDialog">
-  <form method="dialog" class="dialog-card">
-    <div class="dialog-head"><div><div class="eyebrow">REWARD</div><h3>Give selected flies</h3></div><button value="cancel" class="icon-btn">×</button></div>
-    <div id="foodChoices" class="food-grid"></div>
-    <p class="dialog-note">Reward order: shit &lt; apple &lt; peach &lt; sugar cube &lt; cola. These are game reward strengths, not a claim about real fly food preferences.</p>
-  </form>
-</dialog>
-
-<dialog id="notesDialog">
-  <form method="dialog" class="dialog-card wide">
-    <div class="dialog-head"><div><div class="eyebrow">CURRICULUM</div><h3>Teach from notes</h3></div><button value="cancel" class="icon-btn">×</button></div>
-    <label class="field"><span>Name</span><input id="notesName" value="My exercise" /></label>
-    <label class="field"><span>Tempo (BPM)</span><input id="notesTempo" type="number" min="40" max="240" value="100" /></label>
-    <label class="field"><span>Notes</span><textarea id="notesText" rows="5" placeholder="C4 E4 G4 C5 | C5 G4 E4 C4">C4 E4 G4 C5 C5 G4 E4 C4</textarea></label>
-    <label class="file-button block">Import MusicXML<input id="musicXmlInput" type="file" accept=".xml,.musicxml,application/xml,text/xml" /></label>
-    <div class="dialog-actions"><button value="cancel">Cancel</button><button id="confirmNotesBtn" value="cancel" class="primary">Use curriculum</button></div>
-  </form>
-</dialog>
-
-<dialog id="brainDialog">
-  <div class="dialog-card brain-dialog-card">
-    <div class="dialog-head">
-      <div><div class="eyebrow">NEURAL MONITOR</div><h3>Live brain activity</h3></div>
-      <button id="closeBrainBtn" class="icon-btn">×</button>
-    </div>
-    <div class="brain-toolbar">
-      <label><span>Fly</span><select id="brainFlySelect"></select></label>
-      <span id="brainDisclaimer" class="brain-disclaimer">Region activity proxy until a MaleCNS brain pack is loaded.</span>
-    </div>
-    <div class="brain-expanded-grid">
-      <canvas id="brainBigCanvas" width="840" height="520"></canvas>
-      <div id="brainRegionList" class="brain-region-list"></div>
-    </div>
+      <section class="bottom-grid">
+        <div class="panel">
+          <div class="panel-title">TASK QUEUE / STATUS</div>
+          <div id="taskPanel"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">EVENT LOG</div>
+          <div id="logPanel" class="log-panel"></div>
+        </div>
+      </section>
+    </main>
   </div>
-</dialog>
 
-<dialog id="cloudDialog">
-  <form method="dialog" class="dialog-card wide">
-    <div class="dialog-head"><div><div class="eyebrow">OPTIONAL</div><h3>Cloud sync</h3></div><button value="cancel" class="icon-btn">×</button></div>
-    <p class="dialog-note">For opening the same save from home and work. Uses a free Supabase project.</p>
-    <label class="field"><span>Project URL</span><input id="supabaseUrl" placeholder="https://xxxxx.supabase.co" /></label>
-    <label class="field"><span>Anon / public key</span><textarea id="supabaseKey" rows="4"></textarea></label>
-    <label class="field"><span>Save name</span><input id="cloudSaveName" value="main" /></label>
-    <div class="dialog-actions three"><button id="cloudSaveSettingsBtn" value="cancel">Save settings</button><button id="cloudUploadBtn" value="cancel">Upload save</button><button id="cloudDownloadBtn" value="cancel">Download save</button></div>
-    <p class="dialog-note">Never paste a service-role key into a browser app.</p>
-  </form>
-</dialog>
+  <dialog id="brainDialog">
+    <div class="dialog-card large">
+      <div class="dialog-head">
+        <div>
+          <div class="eyebrow">LIVE MONITOR</div>
+          <h3>Brain Activity View</h3>
+        </div>
+        <button id="closeBrainDialog" class="iconbtn">×</button>
+      </div>
+      <div class="brain-dialog-controls">
+        <select id="brainFlySelect"></select>
+      </div>
+      <div class="brain-dialog-grid">
+        <canvas id="brainBigCanvas" width="760" height="420"></canvas>
+        <div class="brain-side">
+          <div class="panel-title">REGIONS</div>
+          <div id="brainRegionList"></div>
+          <div class="panel-title" style="margin-top:14px">NEUROMODULATORS</div>
+          <div id="brainChemList"></div>
+        </div>
+      </div>
+    </div>
+  </dialog>
 
-<script type="module" src="./app.js"></script>
+  <dialog id="notesDialog">
+    <div class="dialog-card notes-card">
+      <div class="dialog-head">
+        <div>
+          <div class="eyebrow">NOTE BOARD</div>
+          <h3>Drag/Click Notes Instead of Typing Like a Caveman</h3>
+        </div>
+        <button id="closeNotesDialog" class="iconbtn">×</button>
+      </div>
+      <div class="notes-controls">
+        <select id="scoreFlySelect"></select>
+        <button id="clearScoreBtn">Clear Notes</button>
+        <button id="assignScoreBtn">Assign To Selected</button>
+      </div>
+      <div id="noteGridWrap" class="note-grid-wrap"></div>
+      <div class="tiny">Click cells to place notes. Each column is a step in time. This gets used as practice material for the relevant instrument.</div>
+    </div>
+  </dialog>
+
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
